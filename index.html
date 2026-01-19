@@ -200,13 +200,37 @@ function isLocalTrain(train) {
   const type = train.displayType || "";
   return type.includes("普通");
 }
+  
+// ===============================
+// サンダーバード相当判定（今回追加）
+// ===============================
+function isThunderbirdRule(train) {
+  const no = String(train.no || "");
+  const type = String(train.displayType || "");
 
+  // ① 列番末尾が Y
+  if (no.endsWith("Y")) return true;
+
+  // ② displayType に「大和路」または「区間」
+  if (type.includes("大和路") || type.includes("区間")) return true;
+
+  return false;
+}
   
 function getTrackKey(train) {
   const last = getLastDigit(train);
   if (last === null) return "up";
+
+  // ★ サンダーバード相当ルール
+  if (isThunderbirdRule(train)) {
+    // サンダーバードと同じ：奇数→down、偶数→up
+    return (last % 2 === 1) ? "down" : "up";
+  }
+
+  // ★ 通常ルール（複線）
   return (last % 2 === 1) ? "up" : "down";
 }
+
 // ===============================
 // 停滞管理（localStorage）
 // ===============================
@@ -456,8 +480,3 @@ setInterval(update, 30000);
 </script>
 </body>
 </html>
-
-
-
-
-
