@@ -216,6 +216,7 @@ function isThunderbirdRule(train) {
 
   // ★ 初回判定条件
   if (
+    no.endsWith("Y") ||
     no.endsWith("K") ||
     type.includes("大和路") ||
     type.includes("区間")
@@ -500,5 +501,6 @@ setInterval(update, 30000);
 </script>
 </body>
 </html>
+
 
 
