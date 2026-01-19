@@ -208,8 +208,8 @@ function isThunderbirdRule(train) {
   const no = String(train.no || "");
   const type = String(train.displayType || "");
 
-  // ① 列番末尾が Y
-  if (no.endsWith("Y")) return true;
+  // ① 列番末尾が YまたはK
+  if (no.endsWith("Y")||no.endsWith("K")) return true;
 
   // ② displayType に「大和路」または「区間」
   if (type.includes("大和路") || type.includes("区間")) return true;
@@ -480,3 +480,4 @@ setInterval(update, 30000);
 </script>
 </body>
 </html>
+
