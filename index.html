@@ -205,17 +205,32 @@ function isLocalTrain(train) {
 // サンダーバード相当判定（今回追加）
 // ===============================
 function isThunderbirdRule(train) {
+  // 列車単位で固定するキー
+  const key = train.no;
+
   const no = String(train.no || "");
   const type = String(train.displayType || "");
 
-  // ① 列番末尾が YまたはK
-  if (no.endsWith("Y")||no.endsWith("K")) return true;
+  // ★ すでにサンダーバード相当と確定している場合は継続
+  if (thunderbirdMap[key]) return true;
 
-  // ② displayType に「大和路」または「区間」
-  if (type.includes("大和路") || type.includes("区間")) return true;
+  // ★ 初回判定条件
+  if (
+    no.endsWith("K") ||
+    type.includes("大和路") ||
+    type.includes("区間")
+  ) {
+    thunderbirdMap[key] = true;
+    localStorage.setItem(
+      "thunderbirdMap",
+      JSON.stringify(thunderbirdMap)
+    );
+    return true;
+  }
 
   return false;
 }
+
   
 function getTrackKey(train) {
   const last = getLastDigit(train);
@@ -239,6 +254,11 @@ const crossMap = JSON.parse(localStorage.getItem("crossMap") || "{}");
 
 const redBandMap = JSON.parse(
   localStorage.getItem("redBandMap") || "{}"
+);
+
+// ★ 追加：サンダーバード相当確定Map
+const thunderbirdMap = JSON.parse(
+  localStorage.getItem("thunderbirdMap") || "{}"
 );
   
 function updateStay(trainKey, x, isStation) {
@@ -480,4 +500,5 @@ setInterval(update, 30000);
 </script>
 </body>
 </html>
+
 
